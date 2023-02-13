@@ -246,7 +246,7 @@ function Stock() {
 
           <Grid container spacing={1} mb={8}>
             <Grid item xs={12} md={4} lg={3} xl={2}>
-              <Box mx="20px">
+              <Box mx={{ xs: "7vw", md: "4vw", lg: "1.5vw", xl: "1vw" }}>
                 <TableContainer
                   component={Paper}
                   sx={{ backgroundColor: "rgb(226 232 240)" }}

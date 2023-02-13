@@ -148,9 +148,7 @@ function CreateChart(props) {
 
   return (
     <Stack direction="column" alignItems="center" gap={2}>
-      {/* <Box sx={{ height: "auto" }}> */}
       <Line data={data} options={options} />
-      {/* </Box> */}
       <ButtonGroup variant="outlined" sx={{ mx: "auto" }}>
         <Button onClick={() => updateChart(5, array)}>5D</Button>
         <Button onClick={() => updateChart(30, array)}>1M</Button>
