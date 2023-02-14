@@ -6,8 +6,10 @@ import {
   Box,
   Tooltip,
   Avatar,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
@@ -32,10 +34,12 @@ function Home() {
   const [loading, isLoading] = useState(false);
   const [stockName, setStockName] = useState("");
   const [stockSymbol, setStockSymbol] = useState("");
+  const [openSnack, setOpenSnack] = useState(false);
   const [add, setAdd] = useState(false);
   const [dbItems, setDbItems] = useState([]);
   const docRef = doc(firestore, "users", auth.currentUser.uid);
   const [logoUrl, setLogoUrl] = useState();
+  const message = useRef("");
 
   useEffect(() => {
     const unsubsribe = onSnapshot(docRef, (doc) => {
@@ -55,15 +59,23 @@ function Home() {
   };
 
   const insertIntoDatabase = async () => {
-    setAdd(true);
-    await updateDoc(docRef, {
-      portfolio: arrayUnion({
-        Name: stockName,
-        stockSymbol: stockSymbol,
-        previous_price: data[7].value,
-        date_added: new Date().toLocaleString(),
-      }),
-    });
+    try {
+      await updateDoc(docRef, {
+        portfolio: arrayUnion({
+          Name: stockName,
+          stockSymbol: stockSymbol,
+          previous_price: data[7].value,
+          date_added: new Date().toLocaleString(),
+        }),
+      });
+      setAdd(true);
+      setOpenSnack(true);
+      message.current = "Stock added to your Portfolio!";
+    } catch (error) {
+      console.log(error);
+      setOpenSnack(true);
+      message.current = "Something Went Wrong!";
+    }
   };
 
   const removeFromDatabase = async () => {
@@ -75,8 +87,12 @@ function Home() {
         portfolio: filteredObject,
       });
       setAdd(false);
+      setOpenSnack(true);
+      message.current = "Stock removed from your Portfolio!";
     } catch (error) {
       console.log(error);
+      setOpenSnack(true);
+      message.current = "Something Went Wrong!";
     }
   };
 
@@ -85,13 +101,19 @@ function Home() {
     setFlag(false);
     isLoading(true);
     let response1 = await fetch(
-      `https://api.twelvedata.com/quote?symbol=${symbol}&apikey=${process.env.REACT_APP_TWELVE_KEY_1}`
+      `https://api.twelvedata.com/quote?symbol=${symbol.trim()}&apikey=${
+        process.env.REACT_APP_TWELVE_KEY_1
+      }`
     );
     let response2 = await fetch(
-      `https://api.twelvedata.com/price?symbol=${symbol}&apikey=${process.env.REACT_APP_TWELVE_KEY_1}`
+      `https://api.twelvedata.com/price?symbol=${symbol.trim()}&apikey=${
+        process.env.REACT_APP_TWELVE_KEY_1
+      }`
     );
     let response3 = await fetch(
-      `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol}&token=${process.env.REACT_APP_FINHUB_KEY}`
+      `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol.trim()}&token=${
+        process.env.REACT_APP_FINHUB_KEY
+      }`
     );
     let json1 = await response1.json();
     let json2 = await response2.json();
@@ -172,6 +194,21 @@ function Home() {
 
   return (
     <>
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={4000}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => setOpenSnack(false)}
+      >
+        <Alert
+          onClose={() => setOpenSnack(false)}
+          severity="info"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {message.current}
+        </Alert>
+      </Snackbar>
       <Stack
         direction="column"
         gap={4}
