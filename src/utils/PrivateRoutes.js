@@ -2,24 +2,22 @@ import React from "react";
 import { Outlet, Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../fireConfig";
-import { CircularProgress, Stack } from "@mui/material";
+import Loading from "./Loading";
+import Navbar from "../components/Navbar";
 
 function PrivateRoutes() {
   const [user, loading] = useAuthState(auth);
 
   if (loading) {
-    return (
-      <Stack
-        sx={{ height: "100vh" }}
-        justifyContent="center"
-        alignItems="center"
-      >
-        <CircularProgress color="inherit" />
-      </Stack>
-    );
+    return <Loading />;
   }
   if (user) {
-    return <Outlet />;
+    return (
+      <>
+        <Navbar />
+        <Outlet />
+      </>
+    );
   }
   return <Navigate to="/authorize" />;
 }

@@ -10,7 +10,6 @@ import {
   Paper,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
-import Navbar from "./Navbar";
 import { auth } from "../fireConfig";
 import {
   reauthenticateWithCredential,
@@ -179,7 +178,6 @@ function Settings() {
           <CircularProgress color="inherit" />
         </Backdrop>
       </div>
-      <Navbar />
       <Stack
         direction="column"
         gap={3}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./Navbar";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { auth, firestore } from "../fireConfig";
 import { Tooltip } from "@mui/material";
@@ -74,7 +73,6 @@ function Portfolio() {
   };
   return (
     <>
-      <Navbar />
       <TableContainer
         component={Paper}
         sx={{ width: "90%", mb: "50px", mx: "auto" }}
