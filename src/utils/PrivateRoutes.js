@@ -19,7 +19,7 @@ function PrivateRoutes() {
       </>
     );
   }
-  return <Navigate to="/authorize" />;
+  return <Navigate to="/" />;
 }
 
 export default PrivateRoutes;

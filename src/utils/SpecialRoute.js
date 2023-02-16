@@ -13,7 +13,7 @@ function SpecialRoute() {
   if (!user) {
     return <Outlet />;
   }
-  return <Navigate to="/" />;
+  return <Navigate to="/home" />;
 }
 
 export default SpecialRoute;

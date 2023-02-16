@@ -68,6 +68,7 @@ function Signup_Login() {
         const user = res.user;
         await updateProfile(user, {
           displayName: name,
+          photoURL: "",
         });
         await setDoc(doc(firestore, "users", auth.currentUser.uid), {
           portfolio: [],
