@@ -30,8 +30,6 @@ const Root = () => {
       <Box
         position="fixed"
         sx={{
-          backgroundColor: "#fff",
-          color: "black",
           py: 1,
           px: 0.5,
           width: "100%",

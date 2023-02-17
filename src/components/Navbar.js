@@ -124,7 +124,7 @@ export default function Navbar() {
                 <MenuItem
                   onClick={() => {
                     auth.signOut();
-                    navigate("/authorize");
+                    navigate("/");
                   }}
                   sx={{ my: 1 }}
                 >
@@ -178,7 +178,7 @@ export default function Navbar() {
                   }}
                   onClick={() => {
                     auth.signOut();
-                    navigate("/authorize");
+                    navigate("/");
                   }}
                 >
                   Logout

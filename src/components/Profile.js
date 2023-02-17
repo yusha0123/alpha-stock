@@ -230,15 +230,16 @@ function Profile() {
           <form>
             <Stack direction="column" gap={2} alignItems="center" mb={3}>
               <Avatar
-                style={{
-                  width: 120,
-                  height: 120,
-                  backgroundColor: "#609EA2",
-                }}
                 src={
                   auth.currentUser.photoURL !== null &&
                   auth.currentUser.photoURL
                 }
+                sx={{
+                  width: { xs: 110, lg: 150 },
+                  height: { xs: 110, lg: 150 },
+                  backgroundColor: "black",
+                  color: "#fff",
+                }}
               >
                 {auth.currentUser.photoURL === null &&
                   auth.currentUser.displayName.charAt(0).toUpperCase()}
@@ -246,6 +247,7 @@ function Profile() {
               <StyledButton
                 variant="contained"
                 component="label"
+                disabled={open}
                 endIcon={<PhotoCamera />}
               >
                 Change Avatar
@@ -300,7 +302,7 @@ function Profile() {
           <form>
             <Stack direction="column" gap={2} alignItems="center" mb={3}>
               <h2> Change Password</h2>
-              {passAlert.open ? (
+              {passAlert.open && (
                 <Alert
                   variant="filled"
                   severity={passAlert.severity}
@@ -314,8 +316,6 @@ function Profile() {
                 >
                   {passAlert.text}
                 </Alert>
-              ) : (
-                <></>
               )}
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -374,7 +374,7 @@ function Profile() {
           <form>
             <Stack direction="column" gap={2} alignItems="center" mb={3}>
               <h2>Change Email</h2>
-              {emailAlert.open ? (
+              {emailAlert.open && (
                 <Alert
                   variant="filled"
                   severity={emailAlert.severity}
@@ -388,8 +388,6 @@ function Profile() {
                 >
                   {emailAlert.text}
                 </Alert>
-              ) : (
-                <></>
               )}
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
