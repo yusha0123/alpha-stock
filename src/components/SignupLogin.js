@@ -17,6 +17,9 @@ import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
 import Alert from "@mui/material/Alert";
 import { setDoc, doc } from "firebase/firestore";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import { Link } from "react-router-dom";
 
 function Signup_Login() {
   const [logIn, setlogIn] = useState(false);
@@ -140,6 +143,20 @@ function Signup_Login() {
         alignItems="center"
         justifyContent="center"
       >
+        <AppBar
+          position="absolute"
+          sx={{ backgroundColor: "#fff", color: "black", py: 1, px: 0.5 }}
+          elevation={0}
+        >
+          <Toolbar>
+            <Box sx={{ flexGrow: 1 }}>
+              <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+                <h2 style={{ letterSpacing: "1.5px" }}>AlphaStock</h2>
+              </Link>
+            </Box>
+          </Toolbar>
+        </AppBar>
+
         <Box sx={{ width: { xs: "85%", sm: "60%", md: "30%", lg: "25%" } }}>
           <form>
             <Stack direction="column" gap={2} alignItems="center">

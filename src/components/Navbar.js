@@ -10,7 +10,7 @@ import Logout from "@mui/icons-material/Logout";
 import WorkIcon from "@mui/icons-material/Work";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import SettingsIcon from "@mui/icons-material/Settings";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { auth } from "../fireConfig";
 import { useNavigate } from "react-router-dom";
 import { Button, Divider, ThemeProvider, Tooltip } from "@mui/material";
@@ -108,14 +108,14 @@ export default function Navbar() {
                 <MenuItem
                   onClick={() => {
                     setAnchorEl(null);
-                    navigate("/settings");
+                    navigate("/profile");
                   }}
                   sx={{ my: 1 }}
                 >
                   <ListItemIcon>
-                    <SettingsIcon fontSize="small" />
+                    <AccountCircleIcon fontSize="small" />
                   </ListItemIcon>
-                  Settings
+                  Profile
                 </MenuItem>
                 <Divider />
                 <MenuItem
@@ -159,9 +159,9 @@ export default function Navbar() {
                       color: "black",
                     },
                   }}
-                  onClick={() => navigate("/settings")}
+                  onClick={() => navigate("/profile")}
                 >
-                  Settings
+                  Profile
                 </Button>
                 <Button
                   sx={{

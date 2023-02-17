@@ -16,14 +16,17 @@ import {
   EmailAuthProvider,
   updatePassword,
   updateEmail,
+  updateProfile,
 } from "firebase/auth";
 import Swal from "sweetalert2";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EmailIcon from "@mui/icons-material/Email";
 import KeyIcon from "@mui/icons-material/Key";
 import { styled } from "@mui/material/styles";
+import { storage } from "../fireConfig";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-function Settings() {
+function Profile() {
   const [open, setOpen] = useState(false);
   const [userPass1, setUserPass1] = useState("");
   const [userPass2, setUserPass2] = useState("");
@@ -41,6 +44,11 @@ function Settings() {
     text: "",
     severity: "",
   });
+  const [avatarAlert, setAvatarAlert] = useState({
+    open: false,
+    text: "",
+    severity: "success",
+  });
 
   const StyledButton = styled(Button)(() => ({
     textTransform: "none",
@@ -50,6 +58,35 @@ function Settings() {
       backgroundColor: " rgb(71 85 105)",
     },
   }));
+
+  const changeAvatar = async (e) => {
+    if (!e.target.files[0]) {
+      return;
+    }
+    setOpen(true);
+    const storageRef = ref(storage, "avatars/" + auth.currentUser.uid);
+    try {
+      await uploadBytes(storageRef, e.target.files[0]);
+      const avatarURL = await getDownloadURL(storageRef);
+      await updateProfile(auth.currentUser, {
+        photoURL: avatarURL,
+      });
+      setOpen(false);
+      setAvatarAlert({
+        open: true,
+        text: "Avatar Updated Successfully!",
+        severity: "success",
+      });
+    } catch (error) {
+      console.log(error);
+      setOpen(false);
+      setAvatarAlert({
+        open: true,
+        text: "Something went wrong, Please try Again Later!",
+        severity: "error",
+      });
+    }
+  };
 
   const handlePassClick = () => {
     if (userPass1 === "" || newPass === "" || cNewPass === "") {
@@ -192,10 +229,48 @@ function Settings() {
         >
           <form>
             <Stack direction="column" gap={2} alignItems="center" mb={3}>
-              <Avatar style={{ backgroundColor: "#3F979B" }}>
-                <AccountCircleIcon />
+              <Avatar
+                style={{
+                  width: 120,
+                  height: 120,
+                  backgroundColor: "#609EA2",
+                }}
+                src={
+                  auth.currentUser.photoURL !== null &&
+                  auth.currentUser.photoURL
+                }
+              >
+                {auth.currentUser.photoURL === null &&
+                  auth.currentUser.displayName.charAt(0).toUpperCase()}
               </Avatar>
-              <h2> Account Details</h2>
+              <StyledButton
+                variant="contained"
+                component="label"
+                endIcon={<PhotoCamera />}
+              >
+                Change Avatar
+                <input
+                  hidden
+                  accept="image/*"
+                  type="file"
+                  onChange={changeAvatar}
+                />
+              </StyledButton>
+              {avatarAlert.open && (
+                <Alert
+                  variant="filled"
+                  severity={avatarAlert.severity}
+                  onClose={() =>
+                    setAvatarAlert({
+                      open: false,
+                      text: "",
+                      severity: "",
+                    })
+                  }
+                >
+                  {avatarAlert.text}
+                </Alert>
+              )}
             </Stack>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -362,4 +437,4 @@ function Settings() {
   );
 }
 
-export default Settings;
+export default Profile;

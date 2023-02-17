@@ -1,7 +1,7 @@
 import "./App.css";
 import SignupLogin from "./components/SignupLogin";
 import Home from "./components/Home";
-import Settings from "./components/Settings";
+import Profile from "./components/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SpecialRoute from "./utils/SpecialRoute";
 import PrivateRoutes from "./utils/PrivateRoutes";
@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route element={<PrivateRoutes />}>
           <Route element={<Home />} path="/home" exact />
-          <Route element={<Settings />} path="/settings" exact />
+          <Route element={<Profile />} path="/profile" exact />
           <Route element={<Portfolio />} path="/portfolio" exact />
         </Route>
         <Route element={<SpecialRoute />}>
