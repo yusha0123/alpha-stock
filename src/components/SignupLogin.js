@@ -142,15 +142,7 @@ function Signup_Login() {
         alignItems="center"
         justifyContent="center"
       >
-        <Box
-          position="fixed"
-          top={0}
-          sx={{
-            py: 1,
-            px: 1,
-            width: "100%",
-          }}
-        >
+        <Box position="fixed" top={0}>
           <Toolbar>
             <Box sx={{ flexGrow: 1 }}>
               <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>

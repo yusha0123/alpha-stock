@@ -146,10 +146,6 @@ function Home() {
           value: new Date(json1.timestamp * 1000).toLocaleTimeString("en-US"),
         },
         {
-          item: "Exchange",
-          value: json1.exchange,
-        },
-        {
           item: "Open",
           value: json1.open,
         },
@@ -209,9 +205,7 @@ function Home() {
           {message.current}
         </Alert>
       </Snackbar>
-      <Stack
-        direction="column"
-        gap={4}
+      <Box
         sx={{ width: { xs: "90%", sm: "80%", md: "50%", lg: "40%" } }}
         mx="auto"
       >
@@ -238,7 +232,7 @@ function Home() {
           }}
           size="small"
         />
-      </Stack>
+      </Box>
       {loading && (
         <Stack alignItems="center" mt={5}>
           <CircularProgress />
@@ -255,14 +249,12 @@ function Home() {
               padding: 2,
             }}
           >
-            {logoUrl ? (
+            {logoUrl && (
               <Avatar
                 src={logoUrl}
                 sx={{ width: 50, height: 50 }}
                 variant="rounded"
               ></Avatar>
-            ) : (
-              <></>
             )}
             <h1 style={{ fontSize: "22px" }}>
               {stockName} ({stockSymbol})
