@@ -163,7 +163,9 @@ function Signup_Login() {
         <Box sx={{ width: { xs: "85%", sm: "60%", md: "30%", lg: "25%" } }}>
           <form>
             <Stack direction="column" gap={2} alignItems="center">
-              <h1>{logIn ? "Sign Up" : "Login"}</h1>
+              <h1>
+                {logIn ? "Create your account" : "Sign in to your account"}
+              </h1>
               <Box sx={{ width: "100%" }}>
                 {alert.open ? (
                   <Alert
@@ -261,7 +263,7 @@ function Signup_Login() {
                   disabled={flag}
                   fullWidth={true}
                 >
-                  Create an Account
+                  Create account
                 </Button>
               )}
               {!logIn && (
@@ -271,11 +273,13 @@ function Signup_Login() {
                   disabled={flag}
                   fullWidth={true}
                 >
-                  Login
+                  Continue
                 </Button>
               )}
               <Typography component="div">
-                {logIn ? " Already Have an Account ?" : "New User ?"}
+                {logIn
+                  ? " Already Have an Account ?"
+                  : "Don't have an account?"}
                 <Button
                   variant="text"
                   onClick={() => {
@@ -287,7 +291,7 @@ function Signup_Login() {
                   }}
                   size="small"
                 >
-                  {logIn ? "Login" : "Sign Up"}
+                  {logIn ? "Sign in" : "Sign Up"}
                 </Button>
               </Typography>
             </Stack>

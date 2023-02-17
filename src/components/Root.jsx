@@ -69,7 +69,7 @@ const Root = () => {
         >
           <Grid item xs={12} md={6}>
             <Box display="flex" flexDirection="column" gap={2}>
-              <h1 className="header1">Welcome to Alpha Stock</h1>
+              <div className="header1">Welcome to Alpha Stock</div>
               <h2 className="header2">
                 Track any Stock any time from any Where!
               </h2>

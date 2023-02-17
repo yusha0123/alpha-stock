@@ -1,23 +1,27 @@
+import {
+  Button,
+  Divider,
+  Tooltip,
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Menu,
+} from "@mui/material";
 import { useState, useEffect } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Logout from "@mui/icons-material/Logout";
 import WorkIcon from "@mui/icons-material/Work";
 import MenuItem from "@mui/material/MenuItem";
-import Menu from "@mui/material/Menu";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { auth } from "../fireConfig";
 import { useNavigate } from "react-router-dom";
-import { Button, Divider, ThemeProvider, Tooltip } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { createTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -25,16 +29,20 @@ export default function Navbar() {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const buttonTheme = createTheme({
-    typography: {
-      button: {
-        textTransform: "none",
-        letterSpacing: "1px",
-        fontSize: 16,
-        fontWeight: 700,
-      },
+  const StyledButton = styled(Button)(() => ({
+    textTransform: "none",
+    letterSpacing: "1px",
+    fontSize: 16,
+    fontWeight: 700,
+    ":hover": {
+      color: "black",
+      backgroundColor: "#E9E8E8",
     },
-  });
+    my: 2,
+    color: "white",
+    display: "block",
+    transition: "0.3 ease out",
+  }));
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -136,55 +144,22 @@ export default function Navbar() {
               </Menu>
             </div>
           ) : (
-            <ThemeProvider theme={buttonTheme}>
-              <Box display="flex" columnGap={4}>
-                <Button
-                  sx={{
-                    my: 2,
-                    color: "white",
-                    display: "block",
-                    ":hover": {
-                      bgcolor: "white",
-                      color: "black",
-                    },
-                  }}
-                  onClick={() => navigate("/portfolio")}
-                >
-                  Portfolio
-                </Button>
-                <Button
-                  sx={{
-                    my: 2,
-                    color: "white",
-                    display: "block",
-                    ":hover": {
-                      bgcolor: "white",
-                      color: "black",
-                    },
-                  }}
-                  onClick={() => navigate("/profile")}
-                >
-                  Profile
-                </Button>
-                <Button
-                  sx={{
-                    my: 2,
-                    color: "white",
-                    display: "block",
-                    ":hover": {
-                      bgcolor: "white",
-                      color: "black",
-                    },
-                  }}
-                  onClick={() => {
-                    auth.signOut();
-                    navigate("/");
-                  }}
-                >
-                  Logout
-                </Button>
-              </Box>
-            </ThemeProvider>
+            <Box display="flex" columnGap={4}>
+              <StyledButton onClick={() => navigate("/portfolio")}>
+                Portfolio
+              </StyledButton>
+              <StyledButton onClick={() => navigate("/profile")}>
+                Profile
+              </StyledButton>
+              <StyledButton
+                onClick={() => {
+                  auth.signOut();
+                  navigate("/");
+                }}
+              >
+                Logout
+              </StyledButton>
+            </Box>
           )}
         </Toolbar>
       </AppBar>

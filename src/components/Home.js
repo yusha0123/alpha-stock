@@ -218,6 +218,7 @@ function Home() {
         <TextField
           fullWidth
           value={symbol}
+          autoComplete="off"
           onChange={(e) => setsymbol(e.target.value)}
           placeholder="Enter Stock Symbol"
           onKeyDown={handleKeyPress}
@@ -282,8 +283,8 @@ function Home() {
           </Box>
 
           <Grid container spacing={1} mb={8}>
-            <Grid item xs={12} md={4} lg={3} xl={2}>
-              <Box mx={{ xs: "7vw", md: "4vw", lg: "1.5vw", xl: "1vw" }}>
+            <Grid item xs={12} md={4} lg={3}>
+              <Box width="90%" mx="auto">
                 <TableContainer
                   component={Paper}
                   sx={{ backgroundColor: "rgb(226 232 240)" }}
@@ -317,7 +318,7 @@ function Home() {
                 </TableContainer>
               </Box>
             </Grid>
-            <Grid item xs={12} md={8} lg={9} xl={10}>
+            <Grid item xs={12} md={8} lg={9}>
               <CreateChart symbol={stockSymbol} />
             </Grid>
           </Grid>
