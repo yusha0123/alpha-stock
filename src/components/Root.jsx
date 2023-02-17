@@ -1,6 +1,5 @@
 import React from "react";
 import { Box } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
@@ -28,38 +27,47 @@ const Root = () => {
   }));
   return (
     <Box sx={{ width: "100vw", height: "100vh" }}>
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar
-          position="static"
-          sx={{ backgroundColor: "#fff", color: "black", py: 1, px: 0.5 }}
-          elevation={0}
-        >
-          <Toolbar>
-            <Box sx={{ flexGrow: 1 }}>
-              <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
-                <h2 style={{ letterSpacing: "1.5px" }}>AlphaStock</h2>
-              </Link>
-            </Box>
-            <Box display="flex" gap={3}>
-              <Link
-                to="/authorize"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                <StyledButton1 variant="contained">
-                  Login / Signup
-                </StyledButton1>
-              </Link>
-            </Box>
-          </Toolbar>
-        </AppBar>
+      <Box
+        position="fixed"
+        sx={{
+          backgroundColor: "#fff",
+          color: "black",
+          py: 1,
+          px: 0.5,
+          width: "100%",
+        }}
+      >
+        <Toolbar>
+          <Box sx={{ flexGrow: 1 }}>
+            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+              <h2 style={{ letterSpacing: "1.5px" }}>AlphaStock</h2>
+            </Link>
+          </Box>
+          <Box display="flex" gap={3}>
+            <Link
+              to="/authorize"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <StyledButton1 variant="contained">Login / Signup</StyledButton1>
+            </Link>
+          </Box>
+        </Toolbar>
       </Box>
-      <Box display="flex" alignItems="center" gap={1} width="90%" mx="auto">
+
+      <Box
+        display="flex"
+        alignItems="center"
+        gap={1}
+        width="90%"
+        height="100%"
+        mx="auto"
+        justifyContent="center"
+      >
         <Grid
           container
           spacing={3}
           direction={{ xs: "column", md: "row" }}
           alignItems="center"
-          paddingTop={5}
         >
           <Grid item xs={12} md={6}>
             <Box display="flex" flexDirection="column" gap={2}>

@@ -299,9 +299,6 @@ function Profile() {
         >
           <form>
             <Stack direction="column" gap={2} alignItems="center" mb={3}>
-              <Avatar style={{ backgroundColor: "#F2CD5C" }}>
-                <KeyIcon />
-              </Avatar>
               <h2> Change Password</h2>
               {passAlert.open ? (
                 <Alert
@@ -362,6 +359,7 @@ function Profile() {
                 variant="contained"
                 onClick={handlePassClick}
                 disabled={open}
+                endIcon={<KeyIcon />}
               >
                 Update Password
               </StyledButton>
@@ -375,9 +373,6 @@ function Profile() {
         >
           <form>
             <Stack direction="column" gap={2} alignItems="center" mb={3}>
-              <Avatar style={{ backgroundColor: "#473C33" }}>
-                <EmailIcon />
-              </Avatar>
               <h2>Change Email</h2>
               {emailAlert.open ? (
                 <Alert
@@ -426,6 +421,7 @@ function Profile() {
                 variant="contained"
                 onClick={handleEmailClick}
                 disabled={open}
+                endIcon={<EmailIcon />}
               >
                 Update Email
               </StyledButton>

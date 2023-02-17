@@ -59,7 +59,10 @@ export default function Navbar() {
               letterSpacing: "2px",
             }}
           >
-            <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+            <Link
+              to="/home"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               AlphaStock
             </Link>
           </Typography>
