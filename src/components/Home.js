@@ -64,7 +64,7 @@ function Home() {
         portfolio: arrayUnion({
           Name: stockName,
           stockSymbol: stockSymbol,
-          previous_price: data[7].value,
+          previous_price: data[6].value,
           date_added: new Date().toLocaleString(),
         }),
       });
