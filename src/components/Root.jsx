@@ -71,7 +71,7 @@ const Root = () => {
             <Box display="flex" flexDirection="column" gap={2}>
               <div className="header1">Welcome to Alpha Stock</div>
               <h2 className="header2">
-                Track any Stock any time from any Where!
+                Track any US Stock any time from any Where!
               </h2>
               <Box textAlign="center">
                 <Link

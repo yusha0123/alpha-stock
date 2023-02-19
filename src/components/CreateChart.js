@@ -94,7 +94,7 @@ function CreateChart(props) {
     const low = [];
     let updatedData = [];
     if (size === 5) {
-      updatedData = slice(7, inputData);
+      updatedData = slice(5, inputData);
     } else if (size === 30) {
       updatedData = slice(30, inputData);
     } else if (size === 180) {
