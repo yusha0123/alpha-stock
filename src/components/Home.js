@@ -1,22 +1,22 @@
 import {
   CircularProgress,
   Paper,
-  Stack,
   TextField,
   Box,
   Tooltip,
   Avatar,
   Snackbar,
   Alert,
+  Table,
 } from "@mui/material";
 import React, { useState, useEffect, useRef } from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "@mui/icons-material/Search";
 import IconButton from "@mui/material/IconButton";
 import Swal from "sweetalert2";
-import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import { styled } from "@mui/material/styles";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -28,7 +28,7 @@ import Grid from "@mui/material/Grid";
 import TableHead from "@mui/material/TableHead";
 
 function Home() {
-  const [symbol, setsymbol] = useState("");
+  const [symbol, setSymbol] = useState();
   const [data, setData] = useState([]);
   const [flag, setFlag] = useState(false);
   const [loading, isLoading] = useState(false);
@@ -40,6 +40,18 @@ function Home() {
   const docRef = doc(firestore, "users", auth.currentUser.uid);
   const [logoUrl, setLogoUrl] = useState();
   const message = useRef("");
+  const [gainers, setGainers] = useState([]);
+  const [showHomeData, setShowHomeData] = useState(true);
+  const SymbolRef = useRef();
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
 
   useEffect(() => {
     const unsubsribe = onSnapshot(docRef, (doc) => {
@@ -50,6 +62,28 @@ function Home() {
       unsubsribe();
     };
     // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    const getGainers = () => {
+      isLoading(true);
+      const options = {
+        method: "GET",
+        headers: {
+          "X-RapidAPI-Key":
+            "e4d1d3d92bmsha21bbac92ddfff9p1b78b5jsn6fe0099b46ee",
+          "X-RapidAPI-Host": "ms-finance.p.rapidapi.com",
+        },
+      };
+      fetch("https://ms-finance.p.rapidapi.com/market/v2/get-movers", options)
+        .then((response) => response.json())
+        .then((response) => {
+          isLoading(false);
+          setGainers(response.gainers);
+        })
+        .catch((err) => console.error(err));
+    };
+    getGainers();
   }, []);
 
   const handleKeyPress = (event) => {
@@ -99,21 +133,22 @@ function Home() {
   const apiCall = async () => {
     setData({});
     setFlag(false);
+    setShowHomeData(false);
     isLoading(true);
     let response1 = await fetch(
-      `https://api.twelvedata.com/quote?symbol=${symbol.trim()}&apikey=${
-        process.env.REACT_APP_TWELVE_KEY_1
-      }`
+      `https://api.twelvedata.com/quote?symbol=${
+        symbol ? symbol.trim() : SymbolRef.current
+      }&apikey=${process.env.REACT_APP_TWELVE_KEY_1}`
     );
     let response2 = await fetch(
-      `https://api.twelvedata.com/price?symbol=${symbol.trim()}&apikey=${
-        process.env.REACT_APP_TWELVE_KEY_1
-      }`
+      `https://api.twelvedata.com/price?symbol=${
+        symbol ? symbol.trim() : SymbolRef.current
+      }&apikey=${process.env.REACT_APP_TWELVE_KEY_1}`
     );
     let response3 = await fetch(
-      `https://finnhub.io/api/v1/stock/profile2?symbol=${symbol.trim()}&token=${
-        process.env.REACT_APP_FINHUB_KEY
-      }`
+      `https://finnhub.io/api/v1/stock/profile2?symbol=${
+        symbol ? symbol.trim() : SymbolRef.current
+      }&token=${process.env.REACT_APP_FINHUB_KEY}`
     );
     let json1 = await response1.json();
     let json2 = await response2.json();
@@ -121,6 +156,7 @@ function Home() {
 
     if (json1.code === 400 || json2.code === 400) {
       Swal.fire("Invalid Stock Symbol!", "", "error");
+      setShowHomeData(true);
     } else {
       setStockName(json1.name);
       setStockSymbol(json1.symbol);
@@ -212,8 +248,8 @@ function Home() {
         <TextField
           fullWidth
           value={symbol}
+          onChange={(e) => setSymbol(e.target.value)}
           autoComplete="off"
-          onChange={(e) => setsymbol(e.target.value)}
           placeholder="Enter Stock Symbol"
           onKeyDown={handleKeyPress}
           InputProps={{
@@ -233,10 +269,70 @@ function Home() {
           size="small"
         />
       </Box>
+      {showHomeData && (
+        <Box
+          sx={{ width: { xs: "90%", md: "80%", lg: "75%" } }}
+          mx="auto"
+          my={2}
+        >
+          <h2 style={{ textAlign: "center", marginBottom: "10px" }}>
+            Top Gainers in the Market
+          </h2>
+
+          <TableContainer component={Paper}>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell align="center">
+                    <h3>Name</h3>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <h3>Symbol</h3>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <h3>Volume</h3>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <h3>Last Price</h3>
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    <h3>% Change</h3>
+                  </StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {gainers.map((row) => (
+                  <TableRow
+                    key={row.ticker}
+                    onClick={() => {
+                      SymbolRef.current = row.ticker;
+                      apiCall();
+                    }}
+                    sx={{
+                      cursor: "pointer",
+                      ":hover": {
+                        backgroundColor: " #EEEEEE",
+                      },
+                    }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="center">{row.ticker}</TableCell>
+                    <TableCell align="center">{row.volume}</TableCell>
+                    <TableCell align="center">{row.lastPrice}</TableCell>
+                    <TableCell align="center">{row.percentNetChange}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      )}
       {loading && (
-        <Stack alignItems="center" mt={5}>
+        <Box position="absolute" top="50%" left="50%">
           <CircularProgress />
-        </Stack>
+        </Box>
       )}
       {flag && (
         <>
@@ -254,7 +350,7 @@ function Home() {
                 src={logoUrl}
                 sx={{ width: 50, height: 50 }}
                 variant="rounded"
-              ></Avatar>
+              />
             )}
             <h1 style={{ fontSize: "22px" }}>
               {stockName} ({stockSymbol})
