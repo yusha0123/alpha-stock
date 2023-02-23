@@ -70,8 +70,7 @@ function Home() {
       const options = {
         method: "GET",
         headers: {
-          "X-RapidAPI-Key":
-            "e4d1d3d92bmsha21bbac92ddfff9p1b78b5jsn6fe0099b46ee",
+          "X-RapidAPI-Key": process.env.REACT_APP_MS_FINANCE,
           "X-RapidAPI-Host": "ms-finance.p.rapidapi.com",
         },
       };

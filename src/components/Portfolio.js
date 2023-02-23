@@ -13,9 +13,12 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { styled } from "@mui/material/styles";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 function Portfolio() {
   const [dbItems, setDbItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const docRef = doc(firestore, "users", auth.currentUser.uid);
   const [updatePrice, setUpdatePrice] = useState({});
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -40,6 +43,7 @@ function Portfolio() {
   useEffect(() => {
     const unsubsribe = onSnapshot(docRef, (doc) => {
       setDbItems(doc.data()?.portfolio);
+      setLoading(false);
     });
 
     return () => {
@@ -89,7 +93,7 @@ function Portfolio() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {dbItems.length !== 0 ? (
+            {dbItems.length !== 0 &&
               dbItems.map((item) => (
                 <StyledTableRow key={item.stockSymbol}>
                   <StyledTableCell component="th" scope="row">
@@ -125,8 +129,8 @@ function Portfolio() {
                     </Tooltip>
                   </StyledTableCell>
                 </StyledTableRow>
-              ))
-            ) : (
+              ))}
+            {dbItems.length === 0 && !loading && (
               <StyledTableRow>
                 <StyledTableCell colSpan={6} align="center">
                   <b>There are 0 items currently in your Portfolio</b>
@@ -136,6 +140,11 @@ function Portfolio() {
           </TableBody>
         </Table>
       </TableContainer>
+      {loading && (
+        <Box position="absolute" top="50%" left="50%">
+          <CircularProgress color="inherit" />
+        </Box>
+      )}
     </>
   );
 }
