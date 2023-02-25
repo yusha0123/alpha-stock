@@ -78,9 +78,16 @@ function Home() {
         .then((response) => response.json())
         .then((response) => {
           isLoading(false);
+          console.log(response);
           setGainers(response.gainers);
         })
-        .catch((err) => console.error(err));
+        .catch((err) => {
+          console.error(err);
+          setShowHomeData(false);
+          setOpenSnack(true);
+          message.current =
+            "Something Went Wrong while fetching Top Gainers from API!";
+        });
     };
     getGainers();
   }, []);
