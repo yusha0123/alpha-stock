@@ -41,7 +41,7 @@ function Home() {
   const [logoUrl, setLogoUrl] = useState();
   const message = useRef("");
   const [gainers, setGainers] = useState([]);
-  const [showHomeData, setShowHomeData] = useState(true);
+  const [showHomeData, setShowHomeData] = useState(false);
   const SymbolRef = useRef();
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -78,12 +78,11 @@ function Home() {
         .then((response) => response.json())
         .then((response) => {
           isLoading(false);
-          console.log(response);
+          setShowHomeData(true);
           setGainers(response.gainers);
         })
         .catch((err) => {
           console.error(err);
-          setShowHomeData(false);
           setOpenSnack(true);
           message.current =
             "Something Went Wrong while fetching Top Gainers from API!";
