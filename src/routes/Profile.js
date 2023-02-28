@@ -230,15 +230,12 @@ function Profile() {
           <form>
             <Stack direction="column" gap={2} alignItems="center" mb={3}>
               <Avatar
-                src={
-                  auth.currentUser.photoURL !== null &&
-                  auth.currentUser.photoURL
-                }
+                src={auth.currentUser.photoURL?.auth.currentUser.photoURL}
                 sx={{
                   width: { xs: 110, lg: 150 },
                   height: { xs: 110, lg: 150 },
-                  backgroundColor: "black",
-                  color: "#fff",
+                  backgroundColor: "#E9E8E8",
+                  color: "#635985",
                 }}
               >
                 {auth.currentUser.photoURL === null &&

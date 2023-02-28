@@ -1,4 +1,4 @@
-import { Stack, Typography, CircularProgress, Box } from "@mui/material";
+import { Stack, Typography, CircularProgress, Box, Alert } from "@mui/material";
 import React, { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -15,17 +15,12 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import { useNavigate } from "react-router-dom";
-import Alert from "@mui/material/Alert";
 import { setDoc, doc } from "firebase/firestore";
 import Toolbar from "@mui/material/Toolbar";
 import { Link } from "react-router-dom";
 
 function Signup_Login() {
   const [logIn, setlogIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [pass, setPass] = useState("");
-  const [name, setName] = useState("");
-  const [cpass, setCpass] = useState("");
   const [flag, setFlag] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [showCPass, setShowCPass] = useState(false);
@@ -33,6 +28,12 @@ function Signup_Login() {
   const [alert, setAlert] = useState({
     open: false,
     text: "",
+  });
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    pass: "",
+    cpass: "",
   });
 
   const SignUp = () => {
@@ -42,21 +43,24 @@ function Signup_Login() {
       showConfirmButton: false,
       timer: 3000,
     });
-    if (name === "" || email === "" || pass === "") {
+    if (user.name === "" || user.email === "" || user.pass === "") {
       setAlert({
         open: true,
         text: "Please submit a valid form!",
       });
       return;
-    } else if (pass !== cpass) {
+    } else if (user.pass !== user.cpass) {
       setAlert({
         open: true,
         text: "Password doesn't match!",
       });
-      setCpass("");
-      setPass("");
+      setUser({
+        ...user,
+        cpass: "",
+        pass: "",
+      });
       return;
-    } else if (pass.length < 7) {
+    } else if (user.pass.length < 7) {
       setAlert({
         open: true,
         text: "Password length is too Short!",
@@ -64,12 +68,12 @@ function Signup_Login() {
       return;
     }
     setFlag(true);
-    createUserWithEmailAndPassword(auth, email, pass)
+    createUserWithEmailAndPassword(auth, user.email, user.pass)
       .then(async (res) => {
         setFlag(true);
-        const user = res.user;
-        await updateProfile(user, {
-          displayName: name,
+        const CurrentUser = res.user;
+        await updateProfile(CurrentUser, {
+          displayName: user.name,
           photoURL: "",
         });
         await setDoc(doc(firestore, "users", auth.currentUser.uid), {
@@ -90,15 +94,17 @@ function Signup_Login() {
           Swal.fire(error.code, "", "error");
         }
         setFlag(false);
-        setEmail("");
-        setPass("");
-        setName("");
-        setCpass("");
+        setUser({
+          name: "",
+          email: "",
+          pass: "",
+          cpass: "",
+        });
       });
   };
 
   const Login = () => {
-    if (email === "" || pass === "") {
+    if (user.email === "" || user.pass === "") {
       setAlert({
         open: true,
         text: "Please submit a valid form!",
@@ -106,7 +112,7 @@ function Signup_Login() {
       return;
     }
     setFlag(true);
-    signInWithEmailAndPassword(auth, email, pass)
+    signInWithEmailAndPassword(auth, user.email, user.pass)
       .then(() => {
         navigate("/"); //navigating the user to home page
       })
@@ -121,7 +127,10 @@ function Signup_Login() {
         } else {
           Swal.fire(error.code, "", "error");
         }
-        setPass("");
+        setUser({
+          ...user,
+          pass: "",
+        });
         setFlag(false);
       });
   };
@@ -152,7 +161,11 @@ function Signup_Login() {
           </Toolbar>
         </Box>
 
-        <Box sx={{ width: { xs: "85%", sm: "60%", md: "30%", lg: "25%" } }}>
+        <Box
+          sx={{
+            width: { xs: "85%", sm: "60%", md: "30%", lg: "25%" },
+          }}
+        >
           <form>
             <Stack direction="column" gap={2} alignItems="center">
               <h1>
@@ -180,8 +193,13 @@ function Signup_Login() {
                   label="Full Name"
                   fullWidth
                   required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={user.name}
+                  onChange={(e) => {
+                    setUser({
+                      ...user,
+                      name: e.target.value,
+                    });
+                  }}
                   autoComplete="off"
                   spellCheck="false"
                   size="small"
@@ -192,8 +210,13 @@ function Signup_Login() {
                 fullWidth
                 required
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={user.email}
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    email: e.target.value,
+                  });
+                }}
                 autoComplete="off"
                 spellCheck="false"
                 size="small"
@@ -202,8 +225,13 @@ function Signup_Login() {
                 label="Password"
                 fullWidth
                 required
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
+                value={user.pass}
+                onChange={(e) => {
+                  setUser({
+                    ...user,
+                    pass: e.target.value,
+                  });
+                }}
                 autoComplete="off"
                 spellCheck="false"
                 size="small"
@@ -227,8 +255,13 @@ function Signup_Login() {
                   label="Confirm Password"
                   fullWidth
                   required
-                  value={cpass}
-                  onChange={(e) => setCpass(e.target.value)}
+                  value={user.cpass}
+                  onChange={(e) => {
+                    setUser({
+                      ...user,
+                      cpass: e.target.value,
+                    });
+                  }}
                   autoComplete="off"
                   spellCheck="false"
                   size="small"

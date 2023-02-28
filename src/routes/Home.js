@@ -23,7 +23,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import { arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { auth, firestore } from "../fireConfig";
 import StarIcon from "@mui/icons-material/Star";
-import CreateChart from "./CreateChart";
+import CreateChart from "../components/CreateChart";
 import Grid from "@mui/material/Grid";
 import TableHead from "@mui/material/TableHead";
 
@@ -91,12 +91,6 @@ function Home() {
     getGainers();
   }, []);
 
-  const handleKeyPress = (event) => {
-    if (event.keyCode === 13) {
-      document.getElementById("search").click();
-    }
-  };
-
   const insertIntoDatabase = async () => {
     try {
       await updateDoc(docRef, {
@@ -135,7 +129,8 @@ function Home() {
     }
   };
 
-  const apiCall = async () => {
+  const apiCall = async (e) => {
+    e.preventDefault();
     setData({});
     setFlag(false);
     setShowHomeData(false);
@@ -250,29 +245,29 @@ function Home() {
         sx={{ width: { xs: "90%", sm: "80%", md: "50%", lg: "40%" } }}
         mx="auto"
       >
-        <TextField
-          fullWidth
-          value={symbol}
-          onChange={(e) => setSymbol(e.target.value)}
-          autoComplete="off"
-          placeholder="Enter Stock Symbol"
-          onKeyDown={handleKeyPress}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  size="large"
-                  onClick={apiCall}
-                  disabled={loading || !symbol}
-                  id="search"
-                >
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          size="small"
-        />
+        <form onSubmit={apiCall}>
+          <TextField
+            fullWidth
+            value={symbol}
+            onChange={(e) => setSymbol(e.target.value)}
+            autoComplete="off"
+            placeholder="Enter Stock Symbol"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    size="large"
+                    disabled={loading || !symbol}
+                    type="submit"
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            size="small"
+          />
+        </form>
       </Box>
       {showHomeData && (
         <Box

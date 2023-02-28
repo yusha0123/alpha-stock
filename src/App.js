@@ -1,12 +1,12 @@
 import "./App.css";
-import SignupLogin from "./components/SignupLogin";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
+import SignupLogin from "./routes/SignupLogin";
+import Home from "./routes/Home";
+import Profile from "./routes/Profile";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SpecialRoute from "./utils/SpecialRoute";
 import PrivateRoutes from "./utils/PrivateRoutes";
-import Portfolio from "./components/Portfolio";
-import Root from "./components/Root";
+import Portfolio from "./routes/Portfolio";
+import Root from "./routes/Root";
 
 function App() {
   return (
