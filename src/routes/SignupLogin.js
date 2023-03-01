@@ -36,20 +36,15 @@ function Signup_Login() {
     cpass: "",
   });
 
-  const SignUp = () => {
+  const SignUp = (e) => {
+    e.preventDefault();
     const Toast = Swal.mixin({
       toast: true,
       position: "top-end",
       showConfirmButton: false,
       timer: 3000,
     });
-    if (user.name === "" || user.email === "" || user.pass === "") {
-      setAlert({
-        open: true,
-        text: "Please submit a valid form!",
-      });
-      return;
-    } else if (user.pass !== user.cpass) {
+    if (user.pass !== user.cpass) {
       setAlert({
         open: true,
         text: "Password doesn't match!",
@@ -74,7 +69,6 @@ function Signup_Login() {
         const CurrentUser = res.user;
         await updateProfile(CurrentUser, {
           displayName: user.name,
-          photoURL: "",
         });
         await setDoc(doc(firestore, "users", auth.currentUser.uid), {
           portfolio: [],
@@ -103,11 +97,12 @@ function Signup_Login() {
       });
   };
 
-  const Login = () => {
-    if (user.email === "" || user.pass === "") {
+  const Login = (e) => {
+    e.preventDefault();
+    if (user.email.length < 5 || user.pass.length < 7) {
       setAlert({
         open: true,
-        text: "Please submit a valid form!",
+        text: "Invalid Credentials!",
       });
       return;
     }
@@ -137,14 +132,14 @@ function Signup_Login() {
 
   return (
     <>
-      <div>
+      <Box>
         <Backdrop
           sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={flag}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
-      </div>
+      </Box>
       <Stack
         direction="column"
         sx={{ height: "100vh" }}
@@ -166,13 +161,13 @@ function Signup_Login() {
             width: { xs: "85%", sm: "60%", md: "30%", lg: "25%" },
           }}
         >
-          <form>
+          <form onSubmit={logIn ? SignUp : Login}>
             <Stack direction="column" gap={2} alignItems="center">
               <h1>
                 {logIn ? "Create your account" : "Sign in to your account"}
               </h1>
               <Box sx={{ width: "100%" }}>
-                {alert.open ? (
+                {alert.open && (
                   <Alert
                     severity="error"
                     onClose={() => {
@@ -184,8 +179,6 @@ function Signup_Login() {
                   >
                     {alert.text}
                   </Alert>
-                ) : (
-                  <></>
                 )}
               </Box>
               {logIn && (
@@ -284,7 +277,7 @@ function Signup_Login() {
               {logIn && (
                 <Button
                   variant="contained"
-                  onClick={SignUp}
+                  type="submit"
                   disabled={flag}
                   fullWidth={true}
                 >
@@ -294,7 +287,7 @@ function Signup_Login() {
               {!logIn && (
                 <Button
                   variant="contained"
-                  onClick={Login}
+                  type="submit"
                   disabled={flag}
                   fullWidth={true}
                 >
