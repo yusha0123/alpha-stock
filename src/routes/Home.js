@@ -57,6 +57,11 @@ function Home() {
     const unsubsribe = onSnapshot(docRef, (doc) => {
       setDbItems(doc.data());
     });
+    document
+      .getElementById("userinput")
+      .addEventListener("submit", function (e) {
+        e.preventDefault();
+      });
 
     return () => {
       unsubsribe();
@@ -129,8 +134,7 @@ function Home() {
     }
   };
 
-  const apiCall = async (e) => {
-    e.preventDefault();
+  const apiCall = async () => {
     setData({});
     setFlag(false);
     setShowHomeData(false);
@@ -245,7 +249,7 @@ function Home() {
         sx={{ width: { xs: "90%", sm: "80%", md: "50%", lg: "40%" } }}
         mx="auto"
       >
-        <form onSubmit={apiCall}>
+        <form onSubmit={apiCall} id="userinput">
           <TextField
             fullWidth
             value={symbol}

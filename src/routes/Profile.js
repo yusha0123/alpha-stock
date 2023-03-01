@@ -25,6 +25,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import { styled } from "@mui/material/styles";
 import { storage } from "../fireConfig";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { deepOrange } from "@mui/material/colors";
 
 function Profile() {
   const [open, setOpen] = useState(false);
@@ -230,12 +231,11 @@ function Profile() {
           <form>
             <Stack direction="column" gap={2} alignItems="center" mb={3}>
               <Avatar
-                src={auth.currentUser.photoURL?.auth.currentUser.photoURL}
+                src={auth.currentUser.photoURL && auth.currentUser.photoURL}
                 sx={{
                   width: { xs: 110, lg: 150 },
                   height: { xs: 110, lg: 150 },
-                  backgroundColor: "#E9E8E8",
-                  color: "#635985",
+                  bgcolor: deepOrange[500],
                 }}
               >
                 {auth.currentUser.photoURL === null &&
